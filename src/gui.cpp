@@ -23,7 +23,7 @@ static void load_dir_structure(vector<string> &path, string sub, vector<string> 
 
 bool show_test_window = false;
 bool show_another_window = false;
-ImVec4 clear_color = ImColor(114, 144, 154);
+ImVec4 clear_color = (ImVec4)ImColor(114, 144, 154);
 
 Gui::Gui(GLFWwindow* w) {
     
@@ -200,7 +200,7 @@ load_dir_structure(
     bool back = sub==".." && last!=".." && last!=".";
     if(back) path.pop_back();
     else if(sub != "") path.push_back(sub);
-    for(int i=0; i<path.size(); i++) {
+    for(size_t i=0; i<path.size(); i++) {
         path_s += path[i]+"/";
     }
     
