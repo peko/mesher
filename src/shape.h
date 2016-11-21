@@ -1,9 +1,14 @@
 #pragma once
 
 #include <string>
+#include <GLFW/glfw3.h>
+
 using std::string;
 
 class Shape {
 public:
-    void load(string path);    
+    Shape();
+
+    void load(string path);
+    void draw(GLFWwindow *window);
 };

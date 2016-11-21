@@ -5,12 +5,13 @@
 #include <GLFW/glfw3.h>
 
 #include "gui.h"
+#include "shape.h"
 
 static void error_callback(int error, const char* description) {
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
 
-int 
+int
 main(int, char**) {
 
     // Setup window
@@ -20,6 +21,8 @@ main(int, char**) {
     GLFWwindow* window = glfwCreateWindow(1280, 720, "shape mesher", NULL, NULL);
     glfwMakeContextCurrent(window);
 
+    Shape shape;
+    shape.load("some_file.shp");
     Gui gui(window);
 
     // Main loop
@@ -27,6 +30,7 @@ main(int, char**) {
         glfwPollEvents();
         gui.draw();
         gui.background();
+        shape.draw(window);
         gui.render();
         glfwSwapBuffers(window);
     }
