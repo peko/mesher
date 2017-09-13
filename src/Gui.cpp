@@ -13,19 +13,20 @@ using std::move;
 #include <imgui.h>
 #include "imgui_impl_glfw.h"
 
-#include "gui.h"
+#include "Gui.h"
 
 static bool show_file_browser = false;
 static void menu();
 static void file_menu();
 static void file_browser();
 static void load_dir_structure(vector<string> &path, string sub, vector<string> &dirs, vector<string> &files);
+static void glinfo(const char* status);
 
 bool show_test_window = false;
 bool show_another_window = false;
 ImVec4 clear_color = (ImVec4)ImColor(114, 144, 154);
 
-Gui::Gui(GLFWwindow* w) {
+Gui::Gui(GLFWwindow *w) {
     
     window = w;
     
@@ -71,7 +72,7 @@ Gui::draw() {
         if (ImGui::Button("Another Window")) show_another_window ^= 1;
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     }
-
+    glinfo(status.c_str());
     menu();
     if(show_file_browser) file_browser();
 
@@ -101,6 +102,13 @@ Gui::shutdown() {
     ImGui_ImplGlfw_Shutdown();
 }
 
+static void
+glinfo(const char* status) {
+    ImGui::Begin("GL Info");
+    ImGui::Text(status);
+    ImGui::End();
+}
+// top menu
 static void 
 menu() {
     if (ImGui::BeginMainMenuBar()) {
@@ -112,7 +120,7 @@ menu() {
     }
 }
 
-static void 
+static void
 file_menu() {
     if (ImGui::MenuItem("Open Shape", "Ctrl+O")) show_file_browser ^= 1;
     if (ImGui::MenuItem("Load Data")) {}
@@ -121,6 +129,7 @@ file_menu() {
     if (ImGui::MenuItem("Quit", "Alt+F4")) {}
 }
 
+// file browser panel
 static void 
 file_browser() {
 
@@ -132,7 +141,7 @@ file_browser() {
     static vector<string> path = {"."};
     if(dirs.empty()) load_dir_structure(path, "", dirs, files);
 
-    ImGui::Columns(1, "mycolumns"); // 4-ways, with border
+    ImGui::Columns(1, "mycolumns"); // 4-ways, with eborder
     // ImGui::Separator();
     // ImGui::Text(path.c_str()); ImGui::NextColumn();
     // ImGui::Separator();
@@ -183,6 +192,7 @@ file_browser() {
     ImGui::End();
 }
 
+// helper dir structure read
 static void
 load_dir_structure(
     vector<string> &path, 
@@ -223,3 +233,6 @@ load_dir_structure(
     sort(dirs.begin(), dirs.end());
     sort(files.begin(), files.end());
 }
+
+// TODO: Context info
+
