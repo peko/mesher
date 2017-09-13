@@ -16,6 +16,7 @@ using std::move;
 
 #include "Gui.h"
 #include "Engine.h"
+#include "EsriShape.h"
 
 static bool show_file_browser = false;
 static void menu();
@@ -62,7 +63,6 @@ bool VectorOfStringGetter(void* data, int n, const char** out_text) {
       *out_text = (*v)[n].c_str();
       return true;
 }
-
                
 void 
 Gui::draw() {
@@ -76,8 +76,8 @@ Gui::draw() {
         if (ImGui::Button("Test Window")) show_test_window ^= 1;
         if (ImGui::Button("Another Window")) show_another_window ^= 1;
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
-        // ImGui::ListBox("Symbols", &engine->shape->names, VectorOfStringGetter(, (void*)&symbols, (int)symbols.size());
+        vector<string>* names = &engine->shape->names;
+        //  ImGui::ListBox("Countries", (*names)[0], VectorOfStringGetter, (void*)names, (int)names-?size(), 1);
 
     }
     glinfo(engine->status.str().c_str());
