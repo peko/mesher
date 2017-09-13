@@ -1,5 +1,8 @@
 #include "Drawable.h"
 
+Drawable::Drawable(){};
+Drawable::~Drawable(){};
+
 void Drawable::draw(GLFWwindow *window) {
     float ratio;
     int width, height;
@@ -7,7 +10,6 @@ void Drawable::draw(GLFWwindow *window) {
     ratio = width / (float) height;
 
     glViewport(0, 0, width, height);
-//    glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);

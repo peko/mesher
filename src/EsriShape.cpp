@@ -54,7 +54,7 @@ void EsriShape::load(string path) {
     }
     SHPClose(shp_h);
 
-	// Загружаем DBF со значениями
+    // Загружаем DBF со значениями
     DBFHandle hDBF;
     hDBF = DBFOpen(path.c_str(), "rb" );
     if( hDBF == NULL ) {
@@ -65,7 +65,7 @@ void EsriShape::load(string path) {
     for(int i = 0; i < DBFGetRecordCount(hDBF); i++ ) {
         char* str = (char *) DBFReadStringAttribute(hDBF, i, fid);
 		if(str != NULL) names.push_back(str);
-		else names.push_back("-");
+		else names.push_back(string("-"));
     }
     DBFClose( hDBF );
 }

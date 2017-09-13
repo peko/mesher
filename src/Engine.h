@@ -12,7 +12,7 @@ class Engine {
 public:
 
     ostringstream status;
-    
+
     Engine();
     ~Engine();
 

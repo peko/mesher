@@ -10,10 +10,12 @@ using std::string;
 using std::sort;
 using std::move;
 
+#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include "imgui_impl_glfw.h"
 
 #include "Gui.h"
+#include "Engine.h"
 
 static bool show_file_browser = false;
 static void menu();
@@ -26,13 +28,10 @@ bool show_test_window = false;
 bool show_another_window = false;
 ImVec4 clear_color = (ImVec4)ImColor(114, 144, 154);
 
-Gui::Gui(GLFWwindow *w) {
-    
-    window = w;
-    
+Gui::Gui(Engine* e) {
+    engine = e;
     // Setup ImGui binding
-    ImGui_ImplGlfw_Init(window, true);
-    
+    ImGui_ImplGlfwGL2_Init(engine->window, true);
     // Load Fonts
     // (there is a default font, this is only if you want to change it. see extra_fonts/README.txt for more details)
     //ImGuiIO& io = ImGui::GetIO();
@@ -45,34 +44,43 @@ Gui::Gui(GLFWwindow *w) {
 }
 
 Gui::~Gui() {
-
+    ImGui_ImplGlfwGL2_Shutdown();
 }
 
 void
 Gui::background(){
     // Rendering
     int display_w, display_h;
-    glfwGetFramebufferSize(window, &display_w, &display_h);
+    glfwGetFramebufferSize(engine->window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
+bool VectorOfStringGetter(void* data, int n, const char** out_text) {
+      const vector<string>* v = (vector<string>*)data;
+      *out_text = (*v)[n].c_str();
+      return true;
+}
+
+               
 void 
 Gui::draw() {
-    ImGui_ImplGlfw_NewFrame();
+    ImGui_ImplGlfwGL2_NewFrame();
     // 1. Show a simple window
     // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
     {
         static float f = 0.0f;
-        ImGui::Text("Hello, world!");
         ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
         ImGui::ColorEdit3("clear color", (float*)&clear_color);
         if (ImGui::Button("Test Window")) show_test_window ^= 1;
         if (ImGui::Button("Another Window")) show_another_window ^= 1;
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+        // ImGui::ListBox("Symbols", &engine->shape->names, VectorOfStringGetter(, (void*)&symbols, (int)symbols.size());
+
     }
-    glinfo(status.c_str());
+    glinfo(engine->status.str().c_str());
     menu();
     if(show_file_browser) file_browser();
 
@@ -87,7 +95,7 @@ Gui::draw() {
 
     // 3. Show the ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
     if (show_test_window) {
-        ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
+        ImGui::SetNextWindowPos(ImVec2(400, 20), ImGuiSetCond_FirstUseEver);
         ImGui::ShowTestWindow(&show_test_window);
     }
 }
@@ -97,10 +105,6 @@ Gui::render() {
     ImGui::Render();
 }
 
-void 
-Gui::shutdown() {
-    ImGui_ImplGlfw_Shutdown();
-}
 
 static void
 glinfo(const char* status) {
@@ -108,6 +112,7 @@ glinfo(const char* status) {
     ImGui::Text(status);
     ImGui::End();
 }
+
 // top menu
 static void 
 menu() {

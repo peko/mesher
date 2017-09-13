@@ -21,7 +21,9 @@ typedef vector<Point_2> contour_t;
 typedef vector<contour_t> shape_t;
 
 class EsriShape : public Drawable {
+
 public:
+
     vector<shape_t> shapes;
     vector<string> names;
 

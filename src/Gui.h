@@ -1,20 +1,19 @@
 #pragma once
 
 #include <string>
-#include <GLFW/glfw3.h>
+
+class Engine;
 
 class Gui {
 public:
-    Gui(GLFWwindow *w);
-    ~Gui();
+    
+    Engine* engine;
 
-    std::string status;
+    Gui(Engine* e);
+    ~Gui();
 
     void background();
     void draw();
     void render();
-    void shutdown();
 
-private:
-    GLFWwindow* window;
  };
